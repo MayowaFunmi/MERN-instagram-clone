@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SignIn.css';
 import logo from '../images/insta-logo.jpeg';
 import { Link } from 'react-router-dom';
 
-function SignIn() {
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <div className="signIn">
       <div>
         <div className="loginForm">
           <img className="signUpLogo" src={logo} alt="" />
           <div>
-            <input type="email" name="email" id="email" placeholder="Email" />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
           </div>
           <div>
             <input
@@ -18,6 +29,10 @@ function SignIn() {
               name="password"
               id="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
           </div>
           <input type="submit" id="login-btn" value="LogIn" />
@@ -31,6 +46,6 @@ function SignIn() {
       </div>
     </div>
   );
-}
+};
 
 export default SignIn;
