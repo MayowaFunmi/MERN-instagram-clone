@@ -21,14 +21,14 @@ const Home = () => {
         </div>
         {/* card content */}
         <div className="card-content">
-          <span class="material-symbols-outlined">favorite</span>
+          <span className="material-symbols-outlined">favorite</span>
           <p>1 Like</p>
           <p>This is amazing</p>
         </div>
 
         {/* comment */}
         <div className="add-comment">
-          <span class="material-symbols-outlined">mood</span>
+          <span className="material-symbols-outlined">mood</span>
           <input type="text" placeholder="Add a comment" />
           <button className="comment">Post</button>
         </div>
