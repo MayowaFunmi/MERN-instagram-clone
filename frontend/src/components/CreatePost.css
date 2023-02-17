@@ -37,3 +37,16 @@ textarea {
     outline: none;
     margin-top: 5px;
 }
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.card-pic img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    float: left;
+}

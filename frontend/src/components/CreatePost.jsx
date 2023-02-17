@@ -6,10 +6,44 @@ import imageIcon from '../images/image_icon.png';
 const CreatePost = () => {
   const [image, setImage] = useState('');
   const [body, setBody] = useState('');
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
 
+  // posting image to cloudinary
   const postDetails = () => {
-    console.log(body, image);
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'instagram-clone');
+    data.append('cloud_name', 'affable-digital-services');
+    fetch(
+      'https://api.cloudinary.com/v1_1/affable-digital-services/image/upload',
+      {
+        method: 'post',
+        body: data,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => setUrl(data.url))
+      .catch((err) => console.log(err));
+
+    // saving post to mongodb
+    fetch('http://localhost:5000/createPost', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        photo: url,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   };
+
   const loadfile = (event) => {
     let output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
@@ -53,6 +87,14 @@ const CreatePost = () => {
           </div>
           <h5>Adewale Adetona</h5>
         </div>
+        <input
+          type="text"
+          placeholder="Post Title"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
         <textarea
           placeholder="Write a caption"
           name=""

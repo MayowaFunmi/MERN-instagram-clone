@@ -50,7 +50,8 @@ router.post('/signin', (req, res) => {
                     //return res.status(200).json({ message: 'You are signed in successfully' })
                     const token = jwt.sign({ _id: savedUser.id }, secrekKey) // payload in requireLogin.js middleware
                         //console.log(token)
-                    res.json(token);
+                    return res.status(200).json({ message: 'You are signed in successfully', token: token })
+                        //res.json(token);
                 } else {
                     return res.status(422).json({ error: 'Invalid password!!' })
                 }

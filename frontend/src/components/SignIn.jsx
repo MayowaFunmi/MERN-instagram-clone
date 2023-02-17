@@ -43,6 +43,8 @@ const SignIn = () => {
           notifyError(data.error);
         } else {
           notifySuccess(data.message);
+          console.log(data.token);
+          localStorage.setItem('jwt', data.token);
           navigate('/');
         }
       });
