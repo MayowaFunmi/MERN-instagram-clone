@@ -27,7 +27,7 @@ router.post('/signup', (req, res) => {
                 password: hashedpassword
             })
             user.save()
-                .then(user => { res.status(200).json({ message: "data saved successfully", userData: user }) })
+                .then(user => { res.status(200).json({ message: "You have signed up successfully", userData: user }) })
                 .catch(err => { console.log(err) })
         })
 
