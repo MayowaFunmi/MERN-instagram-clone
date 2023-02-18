@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import user1 from '../images/user1.jpg';
-import user2 from '../images/user2.jpg';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 
