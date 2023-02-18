@@ -1,13 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import user3 from '../images/user3.jpg';
 import './CreatePost.css';
 import imageIcon from '../images/image_icon.png';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePost = () => {
   const [image, setImage] = useState('');
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
+  const navigate = useNavigate();
+
+  // Toast functons
+  const notifyError = (msg) => toast.error(msg);
+  const notifySuccess = (msg) => toast.success(msg);
+
+  useEffect(() => {
+    if (url) {
+      // saving post to mongodb
+      fetch('http://localhost:5000/createPost', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+        },
+        body: JSON.stringify({
+          title,
+          body,
+          photo: url,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            notifyError(data.error);
+          } else {
+            notifySuccess(data.message);
+            navigate('/');
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [title, body, url, navigate]);
 
   // posting image to cloudinary
   const postDetails = () => {
@@ -24,23 +59,6 @@ const CreatePost = () => {
     )
       .then((res) => res.json())
       .then((data) => setUrl(data.url))
-      .catch((err) => console.log(err));
-
-    // saving post to mongodb
-    fetch('http://localhost:5000/createPost', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-      },
-      body: JSON.stringify({
-        title,
-        body,
-        photo: url,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
       .catch((err) => console.log(err));
   };
 

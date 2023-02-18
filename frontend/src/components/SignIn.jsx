@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './SignIn.css';
 import logo from '../images/insta-logo.jpeg';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { LoginContext } from '../context/LoginContext';
 
 const SignIn = () => {
+  const { setUserLogin } = useContext(LoginContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ const SignIn = () => {
           notifySuccess(data.message);
           console.log(data.token);
           localStorage.setItem('jwt', data.token);
+          setUserLogin(true);
           navigate('/');
         }
       });

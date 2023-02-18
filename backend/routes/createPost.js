@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 const requireLogin = require('../middleware/requireLogin');
 const POST = mongoose.model("POST")
     // route
-router.post("/createPost", requireLogin, (req, res) => {
+router.post("/createPost", requireLogin, async(req, res) => {
     const { title, body, photo } = req.body;
-    console.log(title, body, photo)
     if (!title || !body || !photo) {
         return res.status(422).json({ error: "All fields are required" })
     }
@@ -17,7 +16,7 @@ router.post("/createPost", requireLogin, (req, res) => {
         photo: photo,
         postedBy: req.user
     })
-    post.save().then((result) => {
+    await post.save().then((result) => {
         return res.status(200).json({ message: "Post created successfully", post: result })
     }).catch(err => console.log(err))
 })
