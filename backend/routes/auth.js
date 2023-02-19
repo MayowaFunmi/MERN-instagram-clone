@@ -49,9 +49,9 @@ router.post('/signin', (req, res) => {
                 if (match) {
                     //return res.status(200).json({ message: 'You are signed in successfully' })
                     const token = jwt.sign({ _id: savedUser.id }, secrekKey) // payload in requireLogin.js middleware
-                        //console.log(token)
-                    return res.status(200).json({ message: 'You are signed in successfully', token: token })
-                        //res.json(token);
+                    const { _id, name, email, username } = savedUser
+                    //console.log('user = ', { _id, name, email, username })
+                    return res.status(200).json({ message: 'You are signed in successfully', token: token, user: { _id, name, email, username } })
                 } else {
                     return res.status(422).json({ error: 'Invalid password!!' })
                 }

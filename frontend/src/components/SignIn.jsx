@@ -45,8 +45,9 @@ const SignIn = () => {
           notifyError(data.error);
         } else {
           notifySuccess(data.message);
-          console.log(data.token);
+          //console.log(data.token);
           localStorage.setItem('jwt', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
           //setUserLogin(true);
           navigate('/');
         }

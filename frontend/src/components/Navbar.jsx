@@ -7,12 +7,14 @@ const Navbar = ({ login }) => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
     navigate('/signin');
   };
 
   const loginStatus = () => {
     const token = localStorage.getItem('jwt');
-    if (login || token) {
+    const user = localStorage.getItem('user');
+    if (login || token || user) {
       return [
         <>
           <Link to="/">
