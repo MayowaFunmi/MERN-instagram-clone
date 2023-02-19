@@ -15,6 +15,9 @@ const Navbar = ({ login }) => {
     if (login || token) {
       return [
         <>
+          <Link to="/">
+            <li>Home</li>
+          </Link>
           <Link to="/profile">
             <li>Profile</li>
           </Link>

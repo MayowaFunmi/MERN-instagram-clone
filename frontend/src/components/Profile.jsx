@@ -1,8 +1,20 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import user2 from '../images/user2.jpg';
 import './Profile.css';
 
 const Profile = () => {
+  const token = localStorage.getItem('jwt');
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:5000/myposts', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => setData(result));
+  }, []);
+
   return (
     <div className="profile">
       {/* profile frame */}
@@ -23,13 +35,9 @@ const Profile = () => {
       <hr style={{ width: '90%', margin: '25px auto', opacity: '0.8' }} />
       {/* Gallery */}
       <div className="gallery">
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
-        <img src={user2} alt="" />
+        {data.map((x) => {
+          return <img className="item" src={x.photo} alt="" key={x._id} />;
+        })}
       </div>
     </div>
   );

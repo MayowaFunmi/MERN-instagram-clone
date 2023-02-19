@@ -16,13 +16,48 @@ const Home = () => {
     // fetching all posts
     fetch('http://localhost:5000/allposts', {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
       .then((result) => setData(result))
       .catch((err) => console.log(err));
   }, [navigate]);
+
+  const likePost = (id) => {
+    fetch('http://localhost:5000/like', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({
+        postId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+      });
+  };
+
+  const unLikePost = (id) => {
+    fetch('http://localhost:5000/unlike', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({
+        postId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+      });
+  };
+
   return (
     <div className="home">
       {/* card */}
@@ -42,7 +77,22 @@ const Home = () => {
             </div>
             {/* card content */}
             <div className="card-content">
-              <span className="material-symbols-outlined">favorite</span>
+              <span
+                className="material-symbols-outlined"
+                onClick={() => {
+                  likePost(post._id);
+                }}
+              >
+                favorite
+              </span>
+              <span
+                className="material-symbols-outlined red"
+                onClick={() => {
+                  unLikePost(post._id);
+                }}
+              >
+                favorite
+              </span>
               <p>1 Like</p>
               <p>{post.body}</p>
             </div>

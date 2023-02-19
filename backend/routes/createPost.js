@@ -30,4 +30,47 @@ router.post("/createPost", requireLogin, async(req, res) => {
     }).catch(err => console.log(err))
 })
 
+router.get("/myposts", requireLogin, (req, res) => {
+    //console.log(req.user)
+    POST.find({ postedBy: req.user._id })
+        .populate('postedBy', '_id name username email createdAt updatedAt ')
+        .then(myposts => {
+            res.json(myposts)
+        })
+})
+
+router.put('/like', requireLogin, (req, res) => {
+    console.log(req.body)
+    POST.findByIdAndUpdate(req.body.postId, {
+            $push: { likes: req.user._id }
+        }, {
+            new: true
+        })
+        .populate("postedBy")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            } else {
+                res.status(200).json(result)
+            }
+        })
+})
+
+router.put('/unlike', requireLogin, (req, res) => {
+    console.log(req.body)
+    POST.findByIdAndUpdate(req.body.postId, {
+            $pull: { likes: req.user._id }
+        }, {
+            new: true
+        })
+        .populate("postedBy")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            } else {
+                res.status(200).json(result)
+            }
+        })
+})
+
 module.exports = router

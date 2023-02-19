@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { LoginContext } from '../context/LoginContext';
 
 const SignIn = () => {
-  const { setUserLogin } = useContext(LoginContext);
+  //const { setUserLogin } = useContext(LoginContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const SignIn = () => {
           notifySuccess(data.message);
           console.log(data.token);
           localStorage.setItem('jwt', data.token);
-          setUserLogin(true);
+          //setUserLogin(true);
           navigate('/');
         }
       });

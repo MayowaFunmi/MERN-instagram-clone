@@ -52,3 +52,12 @@
     cursor: pointer;
     color: #b7e1fd;
 }
+
+.material-symbols-outlined {
+    cursor: pointer;
+}
+
+.red {
+    color: red;
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48
+}
