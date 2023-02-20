@@ -80,27 +80,26 @@ const Home = () => {
             {/* card content */}
             <div className="card-content">
               {post.likes.includes(
-                JSON.parse(localStorage.getItem('user'))._id ? (
-                  <span
-                    className="material-symbols-outlined red"
-                    onClick={() => {
-                      unLikePost(post._id);
-                    }}
-                  >
-                    favorite
-                  </span>
-                ) : (
-                  <span
-                    className="material-symbols-outlined"
-                    onClick={() => {
-                      likePost(post._id);
-                    }}
-                  >
-                    favorite
-                  </span>
-                )
+                JSON.parse(localStorage.getItem('user'))._id
+              ) ? (
+                <span
+                  className="material-symbols-outlined red"
+                  onClick={() => {
+                    unLikePost(post._id);
+                  }}
+                >
+                  favorite
+                </span>
+              ) : (
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => {
+                    likePost(post._id);
+                  }}
+                >
+                  favorite
+                </span>
               )}
-
               <p>1 Like</p>
               <p>{post.body}</p>
             </div>
