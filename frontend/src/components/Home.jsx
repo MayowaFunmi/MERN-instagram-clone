@@ -39,6 +39,14 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
+        const newData = data.map((post) => {
+          if (post._id === result._id) {
+            return result;
+          } else {
+            return post;
+          }
+        });
+        setData(newData);
         console.log(result);
       });
   };
@@ -56,7 +64,15 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        const newData = data.map((post) => {
+          if (post._id === result._id) {
+            return result;
+          } else {
+            return post;
+          }
+        });
+        setData(newData);
+        //console.log(result);
       });
   };
 
@@ -100,7 +116,7 @@ const Home = () => {
                   favorite
                 </span>
               )}
-              <p>1 Like</p>
+              <p>{post.likes.length} Likes</p>
               <p>{post.body}</p>
             </div>
 

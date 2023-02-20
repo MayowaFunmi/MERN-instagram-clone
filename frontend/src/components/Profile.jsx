@@ -13,7 +13,7 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((result) => setData(result));
-  }, []);
+  }, [token]);
 
   return (
     <div className="profile">
@@ -24,7 +24,7 @@ const Profile = () => {
         </div>
         {/* profile data */}
         <div className="profile-data">
-          <h1>Akinade Mayowa</h1>
+          <h1>{JSON.parse(localStorage.getItem('user')).name}</h1>
           <div className="profile-info" style={{ display: 'flex' }}>
             <p>40 posts</p>
             <p>50 followers</p>
