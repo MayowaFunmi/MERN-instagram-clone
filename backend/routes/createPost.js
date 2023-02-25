@@ -35,6 +35,7 @@ router.get("/myposts", requireLogin, (req, res) => {
     //console.log(req.user)
     POST.find({ postedBy: req.user._id })
         .populate('postedBy', '_id name username email createdAt updatedAt ')
+        .populate("likes")
         .then(myposts => {
             res.json(myposts)
         })
@@ -48,6 +49,7 @@ router.put('/like', requireLogin, (req, res) => {
             new: true
         })
         .populate("postedBy")
+        .populate("likes")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err })
@@ -85,11 +87,12 @@ router.put('/comment', requireLogin, (req, res) => {
             new: true
         })
         .populate("comments.postedBy", '_id name email createdAt, updatedAt')
+        .populate("postedBy", '_id name email createdAt, updatedAt')
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err })
             } else {
-                res.status(200).json(result)
+                return res.status(200).json({ result, message: 'Your comment has been posted successfully!' })
             }
         })
 })

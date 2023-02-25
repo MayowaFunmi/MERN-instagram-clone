@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import user1 from '../images/user1.jpg';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ const Home = () => {
   const [comment, setComment] = useState('');
   const [show, setShow] = useState(false);
   const [item, setItem] = useState([]);
+  const notifyError = (msg) => toast.error(msg);
+  const notifySuccess = (msg) => toast.success(msg);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -27,7 +30,7 @@ const Home = () => {
       .then((res) => res.json())
       .then((result) => setData(result))
       .catch((err) => console.log(err));
-  }, [navigate]);
+  }, [navigate, comment]);
 
   // show and hide comments
   const toggleComment = (posts) => {
@@ -38,6 +41,11 @@ const Home = () => {
       setShow(true);
       setItem(posts);
     }
+  };
+
+  // all likes
+  const viewLikes = (post) => {
+    console.log(post);
   };
 
   const likePost = (id) => {
@@ -61,7 +69,7 @@ const Home = () => {
           }
         });
         setData(newData);
-        console.log(result);
+        //console.log('data = ', data);
       });
   };
 
@@ -105,7 +113,22 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        if (result.error) {
+          notifyError(result.error);
+        } else {
+          const newData = data.map((post) => {
+            if (post._id === result._id) {
+              return result;
+            } else {
+              return post;
+            }
+          });
+          setData(newData);
+          setComment('');
+          notifySuccess(result.message);
+        }
+
+        //console.log(result);
       });
   };
 
@@ -149,14 +172,48 @@ const Home = () => {
                   favorite
                 </span>
               )}
-              <p>{post.likes.length} Likes</p>
+
+              {post.likes.length === 0 ? (
+                <p>{post.likes.length} Likes</p>
+              ) : post.likes.length === 1 ? (
+                <p
+                  style={{ cursor: 'pointer', color: 'blue' }}
+                  onClick={() => viewLikes(post)}
+                >
+                  {post.likes.length} Like
+                </p>
+              ) : (
+                <p
+                  style={{ cursor: 'pointer', color: 'blue' }}
+                  onClick={() => viewLikes(post)}
+                >
+                  {post.likes.length} Likes
+                </p>
+              )}
+
               <p>{post.body}</p>
-              <p
-                style={{ cursor: 'pointer', fontWeight: 'bold' }}
-                onClick={() => toggleComment(post)}
-              >
-                View all comments
-              </p>
+              {post.comments.length === 1 ? (
+                <p
+                  style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                  onClick={() => toggleComment(post)}
+                >
+                  View {post.comments.length} comment
+                </p>
+              ) : post.comments.length === 0 ? (
+                <p
+                  style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                  onClick={() => toggleComment(post)}
+                >
+                  Be the first to comment
+                </p>
+              ) : (
+                <p
+                  style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                  onClick={() => toggleComment(post)}
+                >
+                  View all {post.comments.length} comments
+                </p>
+              )}
             </div>
 
             {/* comment */}
@@ -238,7 +295,10 @@ const Home = () => {
                 />
                 <button
                   className="comment"
-                  //onClick={() => makeComment(comment, post._id)}
+                  onClick={() => {
+                    makeComment(comment, item._id);
+                    toggleComment();
+                  }}
                 >
                   Post
                 </button>
