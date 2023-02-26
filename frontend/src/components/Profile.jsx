@@ -1,10 +1,25 @@
 import { useState, useEffect } from 'react';
 import user2 from '../images/user2.jpg';
+import PostDetail from './PostDetail';
 import './Profile.css';
 
 const Profile = () => {
   const token = localStorage.getItem('jwt');
   const [data, setData] = useState([]);
+  const [show, setShow] = useState(false);
+  const [post, setPost] = useState([]);
+
+  // show and hide comments
+  const toggleDetails = (posts) => {
+    if (show) {
+      setShow(false);
+      //setItem([]);
+    } else {
+      setShow(true);
+      setPost(posts);
+      //console.log('post = ', post);
+    }
+  };
   useEffect(() => {
     fetch('http://localhost:5000/myposts', {
       headers: {
@@ -36,9 +51,20 @@ const Profile = () => {
       {/* Gallery */}
       <div className="gallery">
         {data.map((x) => {
-          return <img className="item" src={x.photo} alt="" key={x._id} />;
+          return (
+            <img
+              className="item"
+              src={x.photo}
+              alt=""
+              key={x._id}
+              onClick={() => {
+                toggleDetails(x);
+              }}
+            />
+          );
         })}
       </div>
+      {show && <PostDetail item={post} toggleDetails={toggleDetails} />}
     </div>
   );
 };

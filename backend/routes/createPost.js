@@ -9,6 +9,7 @@ router.get("/allposts", requireLogin, (req, res) => {
     POST.find()
         .populate('postedBy')
         .populate("comments.postedBy", "_id name email createdAt updatedAt")
+        .sort("-createdAt")
         .then(posts => res.json(posts))
         .catch(err => console.log())
 })
@@ -36,6 +37,7 @@ router.get("/myposts", requireLogin, (req, res) => {
     POST.find({ postedBy: req.user._id })
         .populate('postedBy', '_id name username email createdAt updatedAt ')
         .populate("likes")
+        .populate("comments.postedBy", "_id name email")
         .then(myposts => {
             res.json(myposts)
         })
@@ -93,6 +95,26 @@ router.put('/comment', requireLogin, (req, res) => {
                 return res.status(422).json({ error: err })
             } else {
                 return res.status(200).json({ result, message: 'Your comment has been posted successfully!' })
+            }
+        })
+})
+
+// API to delete posts
+router.delete("/deletePost/:postId", requireLogin, (req, res) => {
+    POST.findOne({ _id: req.params.postId })
+        .populate('postedBy', '_id')
+        .exec((err, post) => {
+            if (err || !post) {
+                return res.status(422).json({ error: err })
+            }
+            if (post.postedBy._id.toString() === req.user._id.toString()) {
+                post.remove()
+                    .then(result => {
+                        return res.status(200).json({ message: "Post deleted successfully" })
+                    })
+                    .catch((err) => {
+                        return res.status(200).json({ error: err })
+                    })
             }
         })
 })
