@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { LoginContext } from '../context/LoginContext';
 import logo from '../images/insta-logo.jpeg';
 import './Navbar.css';
 
 const Navbar = ({ login }) => {
-  const navigate = useNavigate();
   const { setModalOpen } = useContext(LoginContext);
   const loginStatus = () => {
     const token = localStorage.getItem('jwt');
